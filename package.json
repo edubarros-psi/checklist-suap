@@ -1,6 +1,6 @@
- 
-{
-  "name": "checklist-suap",
+homepage 
+{  "name": "checklist-suap",
+ "homepage": "https://edubarros-psi.github.io/checklist-suap/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -36,3 +36,4 @@
     "vite": "^5.3.4"
   }
 }
+
