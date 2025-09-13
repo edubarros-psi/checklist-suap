@@ -1,76 +1,662 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Checklist SESAU - Health Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a5f7a 0%, #159895 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #002B5B;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .info-bar {
+            background: #57C5B6;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dashboard {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .card {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #002B5B;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card h2 {
+            color: #002B5B;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        .card .icon {
+            font-size: 3rem;
+            color: #002B5B;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #002B5B;
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            background: #004080;
+        }
+        
+        /* Estilos para os formulários */
+        .form-container {
+            padding: 20px;
+            display: none;
+        }
+        
+        .form-active {
+            display: block;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-title {
+            color: #002B5B;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-secondary {
+            background: #7f8c8d;
+        }
+        
+        .btn-secondary:hover {
+            background: #6c7b7d;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+        }
+        
+        .btn-success:hover {
+            background: #219653;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            background: #002B5B;
+            margin-top: 20px;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .info-bar {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Checklist SESAU</h1>
+            <p class="subtitle">Health Analytics - Visitas Técnicas</p>
+        </header>
+        
+        <div class="info-bar">
+            <div class="info-item">
+                <i class="fas fa-user"></i>
+                <span>Avaliador: </span>
+                <input type="text" placeholder="Seu nome" id="evaluator-name" style="background: transparent; border: none; border-bottom: 1px solid white; color: white; padding: 5px; width: 200px;">
+            </div>
+            
+            <div class="info-item">
+                <i class="fas fa-check-circle"></i>
+                <span>Status: </span>
+                <span>Online e Funcionando</span>
+            </div>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card" onclick="showForm('censo')">
+                <div class="icon">
+                    <i class="fas fa-file-medical"></i>
+                </div>
+                <h2><i class="fas fa-file-medical"></i> Censo de Internações</h2>
+                <p>Checklist para coleta de dados sobre internações involuntárias e voluntárias</p>
+                <button class="btn"><i class="fas fa-play"></i> Iniciar Censo</button>
+            </div>
+            
+            <div class="card" onclick="showForm('visita')">
+                <div class="icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h2><i class="fas fa-clipboard-check"></i> Visita Técnica</h2>
+                <p>Checklist completo para avaliação de clínicas e comunidades terapêuticas</p>
+                <button class="btn"><i class="fas fa-play"></i> Iniciar Visita</button>
+            </div>
+        </div>
+        
+        <!-- Formulário de Censo de Internações -->
+        <div id="censo-form" class="form-container">
+            <h2 class="form-title"><i class="fas fa-file-medical"></i> Censo de Internações</h2>
+            
+            <div class="form-section">
+                <h3 class="form-title">I. Identificação da Instituição e do Interno</h3>
+                
+                <div class="form-group">
+                    <label for="clinica-name">Nome da Clínica/Hospital:</label>
+                    <input type="text" id="clinica-name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="data-preenchimento">Data do Preenchimento:</label>
+                    <input type="date" id="data-preenchimento">
+                </div>
+                
+                <div class="form-group">
+                    <label for="interno-name">Nome Completo do Interno:</label>
+                    <input type="text" id="interno-name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="idade">Idade/Data de Nascimento:</label>
+                    <input type="text" id="idade">
+                </div>
+                
+                <div class="form-group">
+                    <label for="endereco">Endereço Completo do Interno:</label>
+                    <textarea id="endereco"></textarea>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3 class="form-title">II. Dados da Internação</h3>
+                
+                <div class="form-group">
+                    <label for="data-entrada">Data de Entrada na Instituição:</label>
+                    <input type="date" id="data-entrada">
+                </div>
+                
+                <div class="form-group">
+                    <label for="reinternacoes">Número de Reinternações (se houver):</label>
+                    <input type="number" id="reinternacoes" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>Motivo da Internação:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="motivo-alcool">
+                            <label for="motivo-alcool">Uso de álcool</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="motivo-drogas">
+                            <label for="motivo-drogas">Uso de outras drogas</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="motivo-transtorno">
+                            <label for="motivo-transtorno">Transtorno mental</label>
+                        </div>
+                    </div>
+                    <input type="text" placeholder="Especificar transtorno mental" id="motivo-especificacao">
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipo de Internação:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="radio" id="tipo-voluntaria" name="tipo-internacao">
+                            <label for="tipo-voluntaria">Voluntária</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="radio" id="tipo-involuntaria" name="tipo-internacao">
+                            <label for="tipo-involuntaria">Involuntária</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tem vinculação com CAPS?</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="radio" id="caps-sim" name="vinculacao-caps">
+                            <label for="caps-sim">Sim</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="radio" id="caps-nao" name="vinculacao-caps">
+                            <label for="caps-nao">Não</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tem suporte familiar?</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="radio" id="suporte-sim" name="suporte-familiar">
+                            <label for="suporte-sim">Sim</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="radio" id="suporte-nao" name="suporte-familiar">
+                            <label for="suporte-nao">Não</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tratamento custeado por:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="custeio-municipio">
+                            <label for="custeio-municipio">Município</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="custeio-estado">
+                            <label for="custeio-estado">Estado</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="custeio-bloqueio">
+                            <label for="custeio-bloqueio">Bloqueio judicial</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="custeio-plano">
+                            <label for="custeio-plano">Plano de saúde</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="custeio-particular">
+                            <label for="custeio-particular">Particular</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="custeio-cota">
+                            <label for="custeio-cota">Cota social</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3 class="form-title">III. Observações Adicionais</h3>
+                <div class="form-group">
+                    <textarea id="observacoes"></textarea>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3 class="form-title">IV. Dados do Avaliador</h3>
+                
+                <div class="form-group">
+                    <label for="avaliador-name">Nome do Avaliador:</label>
+                    <input type="text" id="avaliador-name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="matricula">Matrícula/Identificação:</label>
+                    <input type="text" id="matricula">
+                </div>
+                
+                <div class="form-group">
+                    <label for="data-avaliacao">Data da Avaliação:</label>
+                    <input type="date" id="data-avaliacao">
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button class="btn btn-success" onclick="saveForm('censo')"><i class="fas fa-save"></i> Salvar Censo</button>
+            </div>
+        </div>
+        
+        <!-- Formulário de Visita Técnica -->
+        <div id="visita-form" class="form-container">
+            <h2 class="form-title"><i class="fas fa-clipboard-check"></i> Visita Técnica</h2>
+            
+            <div class="form-section">
+                <h3 class="form-title">I. Identificação da Instituição</h3>
+                
+                <div class="form-group">
+                    <label for="nome-fantasia">Nome de Fantasia:</label>
+                    <input type="text" id="nome-fantasia">
+                </div>
+                
+                <div class="form-group">
+                    <label for="razao-social">Razão Social:</label>
+                    <input type="text" id="razao-social">
+                </div>
+                
+                <div class="form-group">
+                    <label for="endereco-instituicao">Endereço Completo:</label>
+                    <textarea id="endereco-instituicao"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefone">Telefone:</label>
+                    <input type="tel" id="telefone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cnpj">CNPJ:</label>
+                    <input type="text" id="cnpj">
+                </div>
+                
+                <div class="form-group">
+                    <label for="responsavel-tecnico">Responsável Técnico:</label>
+                    <input type="text" id="responsavel-tecnico" placeholder="Nome completo, Profissão, Nº do Conselho de Classe">
+                </div>
+                
+                <div class="form-group">
+                    <label for="responsavel-legal">Responsável Legal:</label>
+                    <input type="text" id="responsavel-legal" placeholder="Nome completo">
+                </div>
+                
+                <div class="form-group">
+                    <label for="data-visita">Data da Visita:</label>
+                    <input type="date" id="data-visita">
+                </div>
+                
+                <div class="form-group">
+                    <label for="responsavel-informacoes">Responsável pelas Informações:</label>
+                    <input type="text" id="responsavel-informacoes" placeholder="Nome completo">
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3 class="form-title">II. Situação Encontrada - Aspectos Gerais</h3>
+                
+                <div class="form-group">
+                    <label for="capacidade-internos">Capacidade total de internos:</label>
+                    <input type="number" id="capacidade-internos" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="internos-atualmente">Número de internos atualmente:</label>
+                    <input type="number" id="internos-atualmente" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>Há menores internados?</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="radio" id="menores-sim" name="menores-internados">
+                            <label for="menores-sim">Sim</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="radio" id="menores-nao" name="menores-internados">
+                            <label for="menores-nao">Não</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button class="btn btn-success" onclick="saveForm('visita')"><i class="fas fa-save"></i> Salvar Visita</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Sistema de Checklist © 2023 - Health Analytics | SESAU/AL</p>
+        </footer>
+    </div>
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
+    <script>
+        // Funções do sistema
+        function showDashboard() {
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('form-active');
+            });
+            document.querySelector('.dashboard').style.display = 'flex';
+        }
+        
+        function showForm(formType) {
+            document.querySelector('.dashboard').style.display = 'none';
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('form-active');
+            });
+            document.getElementById(`${formType}-form`).classList.add('form-active');
+        }
+        
+        function saveForm(formType) {
+            const evaluatorName = document.getElementById('evaluator-name').value;
+            let formData = {};
+            
+            switch(formType) {
+                case 'censo':
+                    formData = {
+                        clinica: document.getElementById('clinica-name').value,
+                        data: document.getElementById('data-preenchimento').value,
+                        interno: document.getElementById('interno-name').value,
+                        idade: document.getElementById('idade').value,
+                        endereco: document.getElementById('endereco').value,
+                        dataEntrada: document.getElementById('data-entrada').value,
+                        reinternacoes: document.getElementById('reinternacoes').value,
+                        motivoAlcool: document.getElementById('motivo-alcool').checked,
+                        motivoDrogas: document.getElementById('motivo-drogas').checked,
+                        motivoTranstorno: document.getElementById('motivo-transtorno').checked,
+                        motivoEspecificacao: document.getElementById('motivo-especificacao').value,
+                        tipoVoluntaria: document.getElementById('tipo-voluntaria').checked,
+                        tipoInvoluntaria: document.getElementById('tipo-involuntaria').checked,
+                        capsSim: document.getElementById('caps-sim').checked,
+                        capsNao: document.getElementById('caps-nao').checked,
+                        suporteSim: document.getElementById('suporte-sim').checked,
+                        suporteNao: document.getElementById('suporte-nao').checked,
+                        custeioMunicipio: document.getElementById('custeio-municipio').checked,
+                        custeioEstado: document.getElementById('custeio-estado').checked,
+                        custeioBloqueio: document.getElementById('custeio-bloqueio').checked,
+                        custeioPlano: document.getElementById('custeio-plano').checked,
+                        custeioParticular: document.getElementById('custeio-particular').checked,
+                        custeioCota: document.getElementById('custeio-cota').checked,
+                        observacoes: document.getElementById('observacoes').value,
+                        avaliador: document.getElementById('avaliador-name').value,
+                        matricula: document.getElementById('matricula').value,
+                        dataAvaliacao: document.getElementById('data-avaliacao').value
+                    };
+                    break;
+                case 'visita':
+                    formData = {
+                        nomeFantasia: document.getElementById('nome-fantasia').value,
+                        razaoSocial: document.getElementById('razao-social').value,
+                        enderecoInstituicao: document.getElementById('endereco-instituicao').value,
+                        telefone: document.getElementById('telefone').value,
+                        email: document.getElementById('email').value,
+                        cnpj: document.getElementById('cnpj').value,
+                        responsavelTecnico: document.getElementById('responsavel-tecnico').value,
+                        responsavelLegal: document.getElementById('responsavel-legal').value,
+                        dataVisita: document.getElementById('data-visita').value,
+                        responsavelInformacoes: document.getElementById('responsavel-informacoes').value,
+                        capacidadeInternos: document.getElementById('capacidade-internos').value,
+                        internosAtualmente: document.getElementById('internos-atualmente').value,
+                        menoresSim: document.getElementById('menores-sim').checked,
+                        menoresNao: document.getElementById('menores-nao').checked
+                    };
+                    break;
+            }
+            
+            // Salvar dados
+            const timestamp = new Date().toISOString();
+            const checklistData = {
+                evaluator: evaluatorName,
+                timestamp: timestamp,
+                type: formType,
+                data: formData
+            };
+            
+            // Salvar no localStorage
+            let savedChecklists = JSON.parse(localStorage.getItem('checklists') || '[]');
+            savedChecklists.push(checklistData);
+            localStorage.setItem('checklists', JSON.stringify(savedChecklists));
+            
+            alert('Dados salvos com sucesso!');
+            showDashboard();
+        }
+        
+        // Carregar nome salvo
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedName = localStorage.getItem('evaluatorName');
+            if (savedName) {
+                document.getElementById('evaluator-name').value = savedName;
+            }
+            
+            // Definir data atual para campos de data
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('data-preenchimento').value = today;
+            document.getElementById('data-avaliacao').value = today;
+            document.getElementById('data-visita').value = today;
+            document.getElementById('data-entrada').value = today;
+            
+            console.log('Sistema carregado com sucesso!');
+        });
+        
+        // Salvar nome do avaliador
+        document.getElementById('evaluator-name').addEventListener('change', function() {
+            localStorage.setItem('evaluatorName', this.value);
+        });
+    </script>
+</body>
+</html>
